@@ -32,10 +32,10 @@ export default function DashboardLayout({
     <div className="flex h-screen w-screen overflow-hidden">
       {/* ===== Sidebar ===== */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-[#0B1623] text-white z-60 
-        transform transition-transform duration-300 ease-in-out 
-        ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
-      >
+  className={`fixed md:static top-[60px] md:top-0 left-0 h-[calc(100%-60px)] md:h-full w-64 bg-[#0B1623] text-white z-60 
+  transform transition-transform duration-300 ease-in-out 
+  ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+>
         <div className="flex flex-col justify-between h-full">
           <div>
             {/* Logo Section */}
