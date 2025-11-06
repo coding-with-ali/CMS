@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -32,11 +31,11 @@ export default function DashboardLayout({
     <div className="flex h-screen w-screen overflow-hidden">
       {/* ===== Sidebar ===== */}
       <aside
-  className={`fixed md:static top-[60px] md:top-0 left-0 h-[calc(100%-60px)] md:h-full w-64 bg-[#0B1623] text-white z-60 
-  transform transition-transform duration-300 ease-in-out 
-  ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
->
-        <div className="flex flex-col justify-between h-full">
+        className={`fixed md:static top-[60px] md:top-0 left-0 h-[calc(100%-60px)] md:h-full w-64 bg-[#0B1623] text-white z-[60]
+        transition-transform duration-300 ease-in-out
+        ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+      >
+        <div className="flex flex-col justify-between h-full pointer-events-auto">
           <div>
             {/* Logo Section */}
             <div className="hidden md:flex flex-col items-center justify-center py-6 border-b border-gray-800">
@@ -58,7 +57,10 @@ export default function DashboardLayout({
                 <Link
                   key={link.name}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    // Delay closing to allow Next.js route transition
+                    setTimeout(() => setOpen(false), 100);
+                  }}
                   className={cn(
                     "block px-6 py-3 text-sm font-medium hover:bg-[#1F3A5F] transition-colors",
                     pathname === link.href && "bg-[#1F3A5F] font-semibold"
@@ -70,7 +72,7 @@ export default function DashboardLayout({
             </nav>
           </div>
 
-          {/* Logout */}
+          {/* Logout Section */}
           <div className="px-6 py-5 border-t border-gray-800">
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
@@ -89,14 +91,14 @@ export default function DashboardLayout({
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          className="fixed inset-0 bg-black/40 z-40 md:hidden pointer-events-auto"
         />
       )}
 
       {/* ===== Main Content ===== */}
-     <main className="flex-1 bg-[#F5F7FA] h-full overflow-y-auto pt-16 md:pt-0">
-  <div className="p-4 md:p-6">{children}</div>
-</main>
+      <main className="flex-1 bg-[#F5F7FA] h-full overflow-y-auto pt-16 md:pt-0">
+        <div className="p-4 md:p-6">{children}</div>
+      </main>
 
       {/* ===== Mobile Navbar ===== */}
       <div className="md:hidden fixed top-0 left-0 w-full flex items-center justify-between bg-white px-4 py-3 border-b z-50 shadow-sm">
@@ -123,4 +125,3 @@ export default function DashboardLayout({
     </div>
   );
 }
-

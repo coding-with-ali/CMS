@@ -1,3 +1,5 @@
+
+
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
@@ -30,19 +32,22 @@ export default function ReportsPage() {
       `)
 
       // Group data by month
-      const monthly: Record<string, { open: number; inProgress: number; completed: number }> = {}
+      const monthly: Record<string, { new: number; inProgress: number; completed: number }> = {}
 
       data.forEach((item: any) => {
         const date = new Date(item.dateTime)
         const month = date.toLocaleString('default', { month: 'short', year: 'numeric' })
 
         if (!monthly[month]) {
-          monthly[month] = { open: 0, inProgress: 0, completed: 0 }
+          monthly[month] = { new: 0, inProgress: 0, completed: 0 }
         }
 
-        if (item.status === 'Open') monthly[month].open++
-        else if (item.status === 'In Progress') monthly[month].inProgress++
-        else if (item.status === 'Completed') monthly[month].completed++
+        const s = item.status?.toLowerCase() || ''
+
+        if (s.includes('new') || s.includes('open') || s.includes('pending'))
+          monthly[month].new++
+        else if (s.includes('progress')) monthly[month].inProgress++
+        else if (s.includes('complete') || s.includes('resolved')) monthly[month].completed++
       })
 
       const formatted = Object.entries(monthly).map(([month, values]) => ({
@@ -91,9 +96,21 @@ export default function ReportsPage() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="open" stroke="#f59e0b" strokeWidth={3} />
-            <Line type="monotone" dataKey="inProgress" stroke="#3b82f6" strokeWidth={3} />
-            <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} />
+            <Line type="monotone" dataKey="new" stroke="#ef4444" strokeWidth={3} name="New" />
+            <Line
+              type="monotone"
+              dataKey="inProgress"
+              stroke="#3b82f6"
+              strokeWidth={3}
+              name="In Progress"
+            />
+            <Line
+              type="monotone"
+              dataKey="completed"
+              stroke="#10b981"
+              strokeWidth={3}
+              name="Completed"
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
